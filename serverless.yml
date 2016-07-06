@@ -1,0 +1,37 @@
+service: cna-starter
+
+custom:
+  package: ${env:OW_PACKAGE, 'cna'}
+  htmlActionPath: dist/remote/action-html
+  client:
+    bucketName: ${env:S3_BUCKET_NAME, 'adobe-cna'}
+    distributionFolder: dist/remote/s3-public
+
+provider:
+  name: openwhisk
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-finch
+  - serverless-openwhisk
+
+package:
+  include:
+    - actions/**
+    - ${self:custom.htmlActionPath}/**
+
+functions:
+
+  # Web UI Action
+  html:
+    handler: ${self:custom.htmlActionPath}/index.main
+    name: ${self:custom.package}/html
+    annotations:
+      web-export: true
+
+  # Test Web Action
+  hello:
+    handler: actions/hello/index.main
+    name: ${self:custom.package}/hello
+    annotations:
+      web-export: true

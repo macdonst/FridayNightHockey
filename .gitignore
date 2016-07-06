@@ -1,0 +1,23 @@
+# package directories
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+
+# UI
+dist
+
+# Config
+config.json
+.env
+
+# IDE & Temp
+.cache
+.idea
+.nyc_output
+.vscode
+coverage
+
+# OSX
+.DS_Store
