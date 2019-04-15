@@ -9,6 +9,7 @@ custom:
 
 provider:
   name: openwhisk
+  runtime: nodejs:10
 
 plugins:
   - serverless-dotenv-plugin
@@ -38,5 +39,6 @@ functions:
   email:
     handler: actions/email/index.main
     name: ${self:custom.package}/email
+    timeout: 120
     annotations:
-      web-export: false
+      web-export: true
