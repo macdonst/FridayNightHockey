@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "NODE_ENV=development PORT=9080 nodemon --inspect $NODE_DEBUG_OPTION --watch web-src/resources --watch actions --watch serverless.yml ./scripts/parcel.proxy.js",
     "build": "NODE_ENV=production REMOTE_ACTIONS=true node scripts/build.ui.js",
-    "deploy": "serverless deploy -v; serverless client deploy -v",
+    "deploy:actions": "serverless deploy -v",
+    "deploy:client": "serverless client deploy -v",
+    "deploy": "npm run deploy:actions && npm run deploy:client",
     "lint": "eslint './actions/**/*.js' './web-src/**/*.js' './scripts/**/*.js' './test/**/*.js'",
     "beautify": "npm run lint -- --fix",
     "test": "npm run lint && mocha",
