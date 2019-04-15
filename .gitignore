@@ -21,3 +21,6 @@ coverage
 
 # OSX
 .DS_Store
+
+# data
+data.json

@@ -21,7 +21,6 @@ package:
     - ${self:custom.htmlActionPath}/**
 
 functions:
-
   # Web UI Action
   html:
     handler: ${self:custom.htmlActionPath}/index.main
@@ -35,3 +34,9 @@ functions:
     name: ${self:custom.package}/hello
     annotations:
       web-export: true
+
+  email:
+    handler: actions/email/index.main
+    name: ${self:custom.package}/email
+    annotations:
+      web-export: false
