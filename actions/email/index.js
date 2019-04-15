@@ -1,18 +1,18 @@
 const nodemailer = require('nodemailer')
 const { google } = require('googleapis')
 const OAuth2 = google.auth.OAuth2
-const data = require('../../data.json')
 
 async function main (args) {
   const oauth2Client = new OAuth2(
-    data.clientId,
-    data.clientSecret,
+    args.clientId,
+    args.clientSecret,
     'https://developers.google.com/oauthplayground'
   )
 
   oauth2Client.setCredentials({
-    refresh_token: data.refresh_token
+    refresh_token: args.refresh_token
   })
+
   const tokens = await oauth2Client.refreshAccessToken()
   const accessToken = tokens.credentials.access_token
 
@@ -20,16 +20,22 @@ async function main (args) {
     service: 'gmail',
     auth: {
       type: 'OAuth2',
-      user: data.user,
-      clientId: data.clientId,
-      clientSecret: data.clientSecret,
-      refreshToken: data.refresh_token,
+      user: args.user,
+      clientId: args.clientId,
+      clientSecret: args.clientSecret,
+      refreshToken: args.refresh_token,
       accessToken: accessToken
     }
   })
 
   return smtpTransport
-    .sendMail(args)
+    .sendMail({
+      from: args.from,
+      to: args.to,
+      subject: args.subject,
+      generateTextFromHTML: true,
+      html: args.html
+    })
     .then(response => {
       smtpTransport.close()
       return {
