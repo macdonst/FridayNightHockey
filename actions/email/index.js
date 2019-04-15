@@ -28,16 +28,8 @@ async function main (args) {
     }
   })
 
-  const mailOptions = {
-    from: data.user,
-    to: 'simon.macdonald@gmail.com',
-    subject: 'Node.js Email with Secure OAuth (data.json)',
-    generateTextFromHTML: true,
-    html: '<b>test</b>'
-  }
-
   return smtpTransport
-    .sendMail(mailOptions)
+    .sendMail(args)
     .then(response => {
       smtpTransport.close()
       return {
