@@ -3,11 +3,6 @@ const Database = require('../utils/db');
 
 module.exports = async function(context, req) {
   const client = new Database();
-
-  /**
-   * change this code so it gets the entire players database
-   * add an "away" array for each player. Use this to generate cancellations
-   */
   const players = await client.getPlayers();
   const {
     facility: facility,
@@ -43,6 +38,24 @@ function generateCancellations(players, gameDate) {
   return cancellations.trim().slice(0, -1);
 }
 
+function generateSpares() {
+  return 'n/a';
+}
+
+function generateGoalies(players, gameDate) {
+  let goalies = players
+    .filter(player => player.goalie === true)
+    .filter(goalie => !goalie.away.includes(gameDate));
+
+  if (goalies.length === 0) {
+    return '? and ?';
+  } else if (goalies.length === 1) {
+    return `${goalies[0].name} and ?`;
+  } else {
+    return `${goalies[0].name} and ${goalies[1].name}`;
+  }
+}
+
 function generateBody(players, facility, gameDate, gameTime) {
   let body = `<p>Hey all,</p>
 
@@ -51,8 +64,8 @@ function generateBody(players, facility, gameDate, gameTime) {
 <p>Lemme know if you can't make it.</p>
 
 <p><b>Cancellations:</b> ${generateCancellations(players, gameDate)}<br/>
-<b>Spares:</b> n/a<br/>
-<b>Goalies:</b> ?</p>
+<b>Spares:</b> ${generateSpares()}<br/>
+<b>Goalies:</b> ${generateGoalies(players, gameDate)}</p>
 
 <p>Simon Mac Donald<br/>
 http://simonmacdonald.com</p>`;
