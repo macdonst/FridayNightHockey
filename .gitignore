@@ -91,3 +91,8 @@ out
 
 # Database
 database
+
+# Don't check these actions in yet
+reminder
+RunReminder
+SpreadSheetTest
