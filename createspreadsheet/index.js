@@ -26,8 +26,8 @@ module.exports = async function(context, req) {
 
   const client = new Database();
   const players = await client.getPlayers();
-  const { date: gameDate } = await client.getNextGame();
-  const playing = generateAvailable(players, gameDate);
+  const { date: gameDate, spares } = await client.getNextGame();
+  const playing = generateAvailable(players, spares, gameDate);
 
   const resource = {
     properties: {
@@ -45,7 +45,7 @@ module.exports = async function(context, req) {
   };
 };
 
-function generateAvailable(players, gameDate) {
+function generateAvailable(players, spares, gameDate) {
   let playing = [];
   for (let player of players) {
     if (!player.goalie) {
@@ -55,6 +55,9 @@ function generateAvailable(players, gameDate) {
         playing.push(player.name);
       }
     }
+  }
+  for (let spare of spares) {
+    playing.push(spare.name);
   }
 
   return playing;

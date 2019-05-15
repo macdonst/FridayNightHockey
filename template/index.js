@@ -7,16 +7,18 @@ module.exports = async function(context, req) {
   const {
     facility: facility,
     date: gameDate,
-    time: gameTime
+    time: gameTime,
+    spares
   } = await client.getNextGame();
 
   const email = {
     from: 'simon.macdonald@gmail.com',
-    to: generateToField(players),
+    to: generateEmailList(players),
+    cc: generateEmailList(spares),
     subject: `Summer Hockey: Friday ${dayjs(gameDate).format(
       'MMMM D'
     )} ${gameTime} ${facility}`,
-    html: generateBody(players, facility, gameDate, gameTime),
+    html: generateBody(players, facility, gameDate, gameTime, spares),
     generateTextFromHTML: true
   };
   context.log(email);
@@ -26,7 +28,7 @@ module.exports = async function(context, req) {
   };
 };
 
-function generateToField(players) {
+function generateEmailList(players) {
   return players.map(player => player.email).join(', ');
 }
 
@@ -38,8 +40,13 @@ function generateCancellations(players, gameDate) {
   return cancellations.trim().slice(0, -1);
 }
 
-function generateSpares() {
-  return 'n/a';
+function generateSpares(players) {
+  let spares = players.reduce(
+    (acc, player) => ' ' + acc + player.name + ', ',
+    ''
+  );
+
+  return spares.trim().slice(0, -1);
 }
 
 function generateGoalies(players, gameDate) {
@@ -56,7 +63,7 @@ function generateGoalies(players, gameDate) {
   }
 }
 
-function generateBody(players, facility, gameDate, gameTime) {
+function generateBody(players, facility, gameDate, gameTime, spares) {
   let body = `<p>Hey all,</p>
 
 <p>Our game is at the ${facility} with a start time of ${gameTime}.</p>
@@ -64,7 +71,7 @@ function generateBody(players, facility, gameDate, gameTime) {
 <p>Lemme know if you can't make it.</p>
 
 <p><b>Cancellations:</b> ${generateCancellations(players, gameDate)}<br/>
-<b>Spares:</b> ${generateSpares()}<br/>
+<b>Spares:</b> ${generateSpares(spares)}<br/>
 <b>Goalies:</b> ${generateGoalies(players, gameDate)}</p>
 
 <p>Simon Mac Donald<br/>
