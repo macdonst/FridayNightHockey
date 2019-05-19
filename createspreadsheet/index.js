@@ -3,7 +3,7 @@ const OAuth2 = google.auth.OAuth2;
 const dayjs = require('dayjs');
 
 // read what database class we want from runtime vars
-const Database = require('../utils/db');
+const Database = require('../utils/db-fake');
 
 module.exports = async function(context, req) {
   const clientId = process.env.SHEETS_CLIENT_ID;
@@ -72,11 +72,10 @@ async function createSpreadsheet(resource, sheets) {
       },
       (err, spreadsheet) => {
         if (err) {
-          console.log('rejecting');
+          console.log('createSpreadsheet: rejecting');
           reject(err);
         } else {
-          console.log('resolving');
-          console.log(`sheet = ${JSON.stringify(spreadsheet)}`);
+          console.log('createSpreadsheet: resolving');
           resolve(spreadsheet.data.spreadsheetId);
         }
       }
@@ -88,14 +87,13 @@ async function appendValues(spreadsheetId, players, sheets) {
   const valueInputOption = 'USER_ENTERED';
   const range = 'Sheet1!A1';
   return new Promise((resolve, reject) => {
-    let values = [];
-    for (let i = 0; i < players.length; i++) {
+    let values = players.map((player, i) => {
       if (i !== 0) {
-        values.push(['', '', '', players[i]]);
+        return ['', '', '', player];
       } else {
-        values.push(['White', 'Dark', '', players[i]]);
+        return ['White', 'Dark', '', player];
       }
-    }
+    });
     let resource = {
       values
     };
@@ -108,11 +106,11 @@ async function appendValues(spreadsheetId, players, sheets) {
       },
       (err, result) => {
         if (err) {
-          console.log('we got an error');
+          console.log('appendValues: error');
           console.log(err);
           reject(err);
         } else {
-          console.log('all good');
+          console.log('appendValues: success');
           resolve(result);
         }
       }
@@ -201,9 +199,11 @@ async function conditionalFormatting(spreadsheetId, sheets) {
       },
       (err, response) => {
         if (err) {
+          console.log('conditionalFormatting: failure');
           console.log(err);
-          return reject(err);
+          reject(err);
         } else {
+          console.log('conditionalFormatting: success');
           resolve(response);
         }
       }
