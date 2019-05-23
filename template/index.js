@@ -7,9 +7,10 @@ module.exports = async function(context, req) {
   const {
     facility: facility,
     date: gameDate,
-    time: gameTime,
-    spares
+    time: gameTime
   } = await client.getNextGame();
+  const allSpares = await client.getSpares();
+  const spares = allSpares.filter(spare => spare.playing.includes(gameDate));
 
   const email = {
     from: 'simon.macdonald@gmail.com',
@@ -40,7 +41,7 @@ function generateCancellations(players, gameDate) {
   return cancellations.trim().slice(0, -1);
 }
 
-function generateSpares(players) {
+function generateSpares(players, gameDate) {
   let spares = players.reduce(
     (acc, player) => ' ' + acc + player.name + ', ',
     ''

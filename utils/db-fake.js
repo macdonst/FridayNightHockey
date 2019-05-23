@@ -1,6 +1,7 @@
 const dayjs = require('dayjs');
 const players = require('../database/players.json');
 const games = require('../database/games.json');
+const spares = require('../database/spares.json');
 
 class Database {
   // Create DB client
@@ -16,6 +17,10 @@ class Database {
         return player;
       }
     }
+  }
+
+  async getSpares() {
+    return spares;
   }
 
   async updateAwayStatus(player, date) {}
