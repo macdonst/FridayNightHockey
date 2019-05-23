@@ -40,6 +40,18 @@ class Database {
     return results[0];
   }
 
+  async getSpares() {
+    const { result: results } = await this.client
+      .database('Players')
+      .container('Spares')
+      .items.readAll()
+      .toArray();
+
+    // SELECT * FROM c where ARRAY_CONTAINS(c.playing, '2019-05-24')
+
+    return results;
+  }
+
   async updateAwayStatus(player, date) {
     console.log(`Replacing item:\n${player.id}\n`);
     if (player.away) {
