@@ -26,7 +26,9 @@ module.exports = async function(context, req) {
 
   const client = new Database();
   const players = await client.getPlayers();
-  const { date: gameDate, spares } = await client.getNextGame();
+  const { date: gameDate } = await client.getNextGame();
+  const allSpares = await client.getSpares();
+  const spares = allSpares.filter(spare => spare.playing.includes(gameDate));
   const playing = generateAvailable(players, spares, gameDate);
 
   const resource = {
