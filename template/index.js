@@ -24,9 +24,7 @@ module.exports = async function(context, req) {
   };
   context.log(email);
 
-  context.res = {
-    body: email
-  };
+  context.done(null, email);
 };
 
 function generateEmailList(players) {

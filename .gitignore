@@ -93,7 +93,7 @@ out
 database
 
 # Don't check these actions in yet
-reminder
+reminder/index-bak.js
 RunReminder
 RunCreateSpreadsheet
 SpreadSheetTest

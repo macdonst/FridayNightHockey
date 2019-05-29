@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
 const OAuth2 = google.auth.OAuth2;
 
-module.exports = async function(context, req) {
+module.exports = async function(context, template) {
   const clientId = process.env.CLIENT_ID;
   const clientSecret = process.env.CLIENT_SECRET;
   const refresh_token = process.env.REFRESH_TOKEN;
@@ -36,22 +36,13 @@ module.exports = async function(context, req) {
 
   // @TODO: add error checking for the body
   return smtpTransport
-    .sendMail(req.body)
+    .sendMail(template)
     .then(response => {
       smtpTransport.close();
-      context.res = {
-        body: {
-          response
-        }
-      };
+      context.done(null, response);
     })
     .catch(error => {
       smtpTransport.close();
-      context.res = {
-        status: 500,
-        body: {
-          error
-        }
-      };
+      context.done(null, error);
     });
 };
