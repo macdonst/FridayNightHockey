@@ -93,6 +93,7 @@ out
 database
 
 # Don't check these actions in yet
+backend/createspreadsheet/index-bak.js
 backend/reminder/index-bak.js
 backend/RunReminder
 backend/RunCreateSpreadsheet
