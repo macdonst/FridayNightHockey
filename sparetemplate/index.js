@@ -1,6 +1,6 @@
 const dayjs = require('dayjs');
 const converter = require('number-to-words');
-const Database = require('../utils/db');
+const Database = require('../utils/' + process.env.DB_ID);
 
 module.exports = async function(context, req) {
   const client = new Database();

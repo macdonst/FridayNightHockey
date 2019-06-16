@@ -3,7 +3,7 @@ const OAuth2 = google.auth.OAuth2;
 const dayjs = require('dayjs');
 
 // read what database class we want from runtime vars
-const Database = require('../utils/db');
+const Database = require('../utils/' + process.env.DB_ID);
 
 module.exports = async function(context, req) {
   const clientId = process.env.SHEETS_CLIENT_ID;
