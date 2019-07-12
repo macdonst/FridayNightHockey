@@ -25,9 +25,9 @@ module.exports = async function(context, req) {
   };
 
   const client = new Database();
-  const players = await client.getPlayers();
+  const players = context.bindings.playersDocument;
   const { date: gameDate } = await client.getNextGame();
-  const allSpares = await client.getSpares();
+  const allSpares = context.bindings.sparesDocument;
   const spares = allSpares.filter(spare => spare.playing.includes(gameDate));
   const playing = generateAvailable(players, spares, gameDate);
 
@@ -38,12 +38,12 @@ module.exports = async function(context, req) {
   };
   const sheets = google.sheets({ version: 'v4', auth: oauth2Client });
   const spreadsheetId = await createSpreadsheet(resource, sheets);
-  const success = await appendValues(spreadsheetId, playing, sheets);
-  const ack = await conditionalFormatting(spreadsheetId, sheets);
+  const appendResult = await appendValues(spreadsheetId, playing, sheets);
+  const formattingResult = await conditionalFormatting(spreadsheetId, sheets);
   console.log('we have success');
 
   return {
-    body: ack
+    body: formattingResult
   };
 };
 
