@@ -1,17 +1,23 @@
 const dayjs = require('dayjs');
 const converter = require('number-to-words');
-const Database = require('../utils/' + process.env.DB_ID);
+const Database = require('../utils/db');
 
 module.exports = async function(context, req) {
   const client = new Database();
-  const players = await client.getPlayers();
+  const players = context.bindings.playersDocument;
+  const games = context.bindings.gamesDocument;
   const {
     facility: facility,
     date: gameDate,
     time: gameTime
-  } = await client.getNextGame();
-
-  const sparesEmails = await client.getSpares();
+  } = await client.getNextGame(games);
+  // If there is no game this Friday skip emailing spares
+  if (gameDate === null) {
+    return {
+      body: 'No Game'
+    };
+  }
+  const sparesEmails = context.bindings.sparesDocument;
 
   let totalPlayers = countSkaters(players);
   let totalCancellations = countCancellations(players, gameDate);

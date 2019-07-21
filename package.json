@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@azure/cosmos": "^2.1.5",
     "azure-keyvault": "^3.0.4",
     "dayjs": "^1.8.13",
     "durable-functions": "^1.2.1",

@@ -1,15 +1,22 @@
 const dayjs = require('dayjs');
-const Database = require('../utils/' + process.env.DB_ID);
+const Database = require('../utils/db');
 
 module.exports = async function(context, req) {
   const client = new Database();
-  const players = await client.getPlayers();
+  const players = context.bindings.playersDocument;
+  const games = context.bindings.gamesDocument;
   const {
     facility: facility,
     date: gameDate,
     time: gameTime
-  } = await client.getNextGame();
-  const allSpares = await client.getSpares();
+  } = await client.getNextGame(games);
+  // If there is no game this Friday skip sending a reminder
+  if (gameDate === null) {
+    return {
+      body: 'No Game'
+    };
+  }
+  const allSpares = context.bindings.sparesDocument;
   const spares = allSpares.filter(spare => spare.playing.includes(gameDate));
 
   const email = {

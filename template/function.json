@@ -4,6 +4,33 @@
       "name": "template",
       "type": "activityTrigger",
       "direction": "in"
+    },
+    {
+      "name": "playersDocument",
+      "type": "cosmosDB",
+      "databaseName": "Players",
+      "collectionName": "Items",
+      "createIfNotExists": true,
+      "connectionStringSetting": "CosmosDB",
+      "direction": "in"
+    },
+    {
+      "name": "sparesDocument",
+      "type": "cosmosDB",
+      "databaseName": "Players",
+      "collectionName": "Spares",
+      "createIfNotExists": true,
+      "connectionStringSetting": "CosmosDB",
+      "direction": "in"
+    },
+    {
+      "name": "gamesDocument",
+      "type": "cosmosDB",
+      "databaseName": "Games",
+      "collectionName": "Items",
+      "createIfNotExists": true,
+      "connectionStringSetting": "CosmosDB",
+      "direction": "in"
     }
   ],
   "disabled": false

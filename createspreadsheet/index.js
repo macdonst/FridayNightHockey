@@ -3,7 +3,7 @@ const OAuth2 = google.auth.OAuth2;
 const dayjs = require('dayjs');
 
 // read what database class we want from runtime vars
-const Database = require('../utils/' + process.env.DB_ID);
+const Database = require('../utils/db');
 
 module.exports = async function(context, req) {
   const clientId = process.env.SHEETS_CLIENT_ID;
@@ -26,7 +26,14 @@ module.exports = async function(context, req) {
 
   const client = new Database();
   const players = context.bindings.playersDocument;
-  const { date: gameDate } = await client.getNextGame();
+  const games = context.bindings.gamesDocument;
+  const { date: gameDate } = await client.getNextGame(games);
+  // If there is no game this Friday skip creating the spreadsheet
+  if (gameDate === null) {
+    return {
+      body: 'No Game'
+    };
+  }
   const allSpares = context.bindings.sparesDocument;
   const spares = allSpares.filter(spare => spare.playing.includes(gameDate));
   const playing = generateAvailable(players, spares, gameDate);

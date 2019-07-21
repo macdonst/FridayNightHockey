@@ -5,15 +5,39 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": [
-        "get",
-        "post"
-      ]
+      "methods": ["get", "post"]
     },
     {
       "type": "http",
       "direction": "out",
       "name": "res"
+    },
+    {
+      "name": "playersDocument",
+      "type": "cosmosDB",
+      "databaseName": "Players",
+      "collectionName": "Items",
+      "createIfNotExists": true,
+      "connectionStringSetting": "CosmosDB",
+      "direction": "in"
+    },
+    {
+      "name": "sparesDocument",
+      "type": "cosmosDB",
+      "databaseName": "Players",
+      "collectionName": "Spares",
+      "createIfNotExists": true,
+      "connectionStringSetting": "CosmosDB",
+      "direction": "in"
+    },
+    {
+      "name": "gamesDocument",
+      "type": "cosmosDB",
+      "databaseName": "Games",
+      "collectionName": "Items",
+      "createIfNotExists": true,
+      "connectionStringSetting": "CosmosDB",
+      "direction": "in"
     }
   ]
 }
