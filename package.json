@@ -14,7 +14,7 @@
     "dayjs": "^1.8.13",
     "durable-functions": "^1.2.1",
     "googleapis": "^39.2.0",
-    "node-fetch": "^2.5.0",
+    "node-fetch": "^2.6.7",
     "nodemailer": "^6.1.1",
     "number-to-words": "^1.2.4"
   }
